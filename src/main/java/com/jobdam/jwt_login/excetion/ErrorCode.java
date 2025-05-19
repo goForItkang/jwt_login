@@ -1,5 +1,8 @@
 package com.jobdam.jwt_login.excetion;
 
+import lombok.Getter;
+
+@Getter
 public enum ErrorCode {
     DUPLICATE_USERID(409,"U001","ID가 중복입니다.");
 
@@ -13,4 +16,5 @@ public enum ErrorCode {
         this.errorCode = errorCode;
         this.errorMsg = errorMsg;
     }
+
 }
