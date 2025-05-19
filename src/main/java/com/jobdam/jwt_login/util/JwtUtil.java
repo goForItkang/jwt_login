@@ -1,5 +1,9 @@
 package com.jobdam.jwt_login.util;
 
+import com.jobdam.jwt_login.dto.UserDTO;
+import com.jobdam.jwt_login.excetion.CustomException;
+import com.jobdam.jwt_login.excetion.ErrorCode;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -7,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import javax.management.relation.Role;
 import java.util.Date;
 
 @Component
@@ -28,5 +33,40 @@ public class JwtUtil {
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))// 발금시간 30분
                 .signWith(getSecretKey(), SignatureAlgorithm.HS256)
                 .compact();
+    }
+    public String getUserId(String token){
+        return Jwts.parserBuilder()
+                .setSigningKey(getSecretKey())
+                .build()
+                .parseClaimsJwt(token)
+                .getBody()
+                .getSubject(); // subject 식별이름
+    }
+    public boolean validateToken(String token){
+            try {
+                Claims claims = Jwts.parserBuilder()
+                        .setSigningKey(getSecretKey())
+                        .build()
+                        .parseClaimsJws(token)
+                        .getBody();
+                return !claims.getExpiration().before(new Date());
+            } catch (io.jsonwebtoken.ExpiredJwtException e) {
+                throw new CustomException(ErrorCode.INVALID_TOKEN);
+            } catch (io.jsonwebtoken.SignatureException e) {
+                throw new CustomException(ErrorCode.INVALID_SIGNATURE);
+            } catch (io.jsonwebtoken.MalformedJwtException e) {
+                throw new CustomException(ErrorCode.MALFORMED_TOKEN);
+            } catch (Exception e) {
+                throw new CustomException(ErrorCode.INVALID_TOKEN);
+            }
+    }
+    // 권한 가져오기
+    public String getRole(String token){
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getSecretKey())
+                .build()
+                .parseClaimsJwt(token)
+                .getBody();
+        return claims.get("role").toString();
     }
 }
