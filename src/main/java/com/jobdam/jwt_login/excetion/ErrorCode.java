@@ -11,8 +11,9 @@ public enum ErrorCode {
     MALFORMED_TOKEN(400, "A005", "잘못된 JWT 형식입니다."),
     INVALID_TOKEN(401, "A006", "유효하지 않은 JWT 토큰입니다."),
     ACCESS_DENIED(403, "A003", "접근 권한이 없습니다."),
-    USER_NOT_FOUND(404, "U002", "존재하지 않는 사용자입니다.");
-
+    USER_NOT_FOUND(404, "U002", "존재하지 않는 사용자입니다."),
+    ENCODING_ERROR(6001,"S001","암호화 중 오류가 났습니다"),
+    DECODING_ERROR(6002,"S002","복호화 오류가 났습니다");
     private final int status;
     private final String errorCode;
     private final String errorMsg;

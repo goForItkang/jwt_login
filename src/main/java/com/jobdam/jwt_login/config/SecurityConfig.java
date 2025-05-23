@@ -19,12 +19,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.disable())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth-> auth
                         .requestMatchers("/admin/**").hasRole("ADMIN") // 관리자 즉 어드민만 가능함
                         .requestMatchers("/user/**").hasRole("USER") // user만 가능 admin도 접속 가능할려면 hasanyroles 로 써야함
-                        .requestMatchers("/login","/signup","/").permitAll() // 모든 사용자가 접속 가능해야함
+                        .requestMatchers("/api/login","/api/signup","/").permitAll() // 모든 사용자가 접속 가능해야함
                         .anyRequest().authenticated()); //인증 된사용자
                 return http.build();
     }
