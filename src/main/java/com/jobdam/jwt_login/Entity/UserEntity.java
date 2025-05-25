@@ -20,4 +20,6 @@ public class UserEntity {
     private String password;
     private String userName;
 
+    @OneToOne(mappedBy = "user")
+    private RefreshTokenEntity refreshToken;
 }

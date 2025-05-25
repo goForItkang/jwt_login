@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-//    @PostMapping("/api/signup")
-//    public HttpEntity<Message> signup(@RequestBody UserDTO userDTO) {
-//        Message message = new Message();
-//        message.setStatus(200);
-//        message.setMessage("Sign up successful");
-//        userService.userSave(userDTO);
-//        return new HttpEntity<>(message);
-//    }
+    @PostMapping("/api/signup")
+    public HttpEntity<Message> signup(@RequestBody UserDTO userDTO) {
+        Message message = new Message();
+        message.setStatus(200);
+        message.setMessage("Sign up successful");
+        userService.userSave(userDTO);
+        return new HttpEntity<>(message);
+    }
 
 }

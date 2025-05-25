@@ -5,13 +5,17 @@ import com.jobdam.jwt_login.dto.UserDTO;
 import com.jobdam.jwt_login.excetion.CustomException;
 import com.jobdam.jwt_login.excetion.ErrorCode;
 import com.jobdam.jwt_login.repository.UserRepository;
+import com.jobdam.jwt_login.util.AESUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final AESUtil aesUtil;
     public void userSave(UserDTO userDTO) {
         try {
             userRepository.insertUser(entityBuilder(userDTO));
@@ -22,9 +26,9 @@ public class UserService {
     private UserEntity entityBuilder(UserDTO userDTO){
         return UserEntity.builder()
                 .userId(userDTO.getUserId())
-                .userEmail(userDTO.getUserEmail())
-                .password(userDTO.getPassword())
-                .userName(userDTO.getUsername())
+                .userEmail(aesUtil.encoding(userDTO.getUserEmail()))
+                .password(passwordEncoder.encode(userDTO.getPassword()))
+                .userName(aesUtil.encoding(userDTO.getUsername()))
                 .build();
     }
 
