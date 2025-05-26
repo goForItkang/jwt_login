@@ -4,6 +4,7 @@ import com.jobdam.jwt_login.dto.UserDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -11,12 +12,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
     @Column(unique = true , nullable = false)
     private String userEmail;
+    @Column(unique = true , nullable = false)
+    private String userEmailHashCode;
     private String password;
     private String userName;
 

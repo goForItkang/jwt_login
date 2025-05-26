@@ -29,21 +29,6 @@ public class HomeController {
         message.setData("Hello World");
         return new HttpEntity<>(message, headers);
     }
-    @PostMapping("/api/login")
-    public HttpEntity<Message>login(@RequestBody UserDTO userDTO){
-        Message message = new Message();
-        message.setMessage("암호화");
-        message.setData(userDTO);
-        message.setStatus(201);
-        String testCheckEmail = aesUtil.encoding(userDTO.getUserEmail());
-        String testPassword = userDTO.getPassword();
-        String decoding = aesUtil.decoding(testCheckEmail);
-        log.info("이메일 {}",userDTO.getUserEmail());
-        log.info("이메일 암호화 값 {}",testCheckEmail);
-        log.info("이메일 복호화 값 {}",decoding);
-        log.info("password 값 {}",testPassword);
-        log.info("password 암호화값 {}" ,passwordEncoder.encode(testPassword));
-        return new HttpEntity<>(message);
-    }
+
 
 }

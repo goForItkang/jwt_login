@@ -18,4 +18,12 @@ public class UserRepository {
     public void insertUser(UserEntity userEntity) {
         em.persist(userEntity);
     }
+    // 유저 로그인 로직
+    @Transactional(readOnly = true)
+    public UserEntity selectByEmail(String email) {
+       UserEntity user =  em.createQuery("select u from UserEntity u where u.userEmailHashCode = :email",UserEntity.class)
+               .setParameter("email",email)
+               .getSingleResult();
+       return user;
+    }
 }
