@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class UserController {
     private final UserService userService;
+    //일반 유저 로그인
     @PostMapping("/api/signup")
     public HttpEntity<Message> signup(@RequestBody UserDTO userDTO) {
         Message message = new Message();
@@ -25,10 +26,9 @@ public class UserController {
     }
     @PostMapping("/api/login")
     public HttpEntity<Message>login(@RequestBody UserDTO userDTO){
-        System.out.println(userDTO);
         //로그인한 유저 정보를 유저
         UserDTO loginSuccessUser = userService.login(userDTO);
-        String token = userService.tokenGenerate(userDTO);
+        String token = userService.tokenGenerate(loginSuccessUser);
         Message message = new Message();
         message.setStatus(200);
         message.setMessage("Login successful");
@@ -37,5 +37,6 @@ public class UserController {
         message.setData(accessToken);
         return new HttpEntity<>(message);
     }
+
 
 }

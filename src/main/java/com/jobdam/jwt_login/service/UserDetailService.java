@@ -1,7 +1,9 @@
 package com.jobdam.jwt_login.service;
 
 import com.jobdam.jwt_login.Entity.UserEntity;
+import com.jobdam.jwt_login.Entity.UserRoleEntity;
 import com.jobdam.jwt_login.dto.UserDTO;
+import com.jobdam.jwt_login.dto.UserRoleDTO;
 import com.jobdam.jwt_login.excetion.CustomException;
 import com.jobdam.jwt_login.repository.UserRepository;
 import com.jobdam.jwt_login.util.AESUtil;
@@ -13,6 +15,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Service
 public class UserDetailService implements UserDetailsService {
@@ -21,8 +26,11 @@ public class UserDetailService implements UserDetailsService {
     private final AESUtil aesUtil;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println("여기 까지는 데이터가 전송 된거야 ?");
         UserEntity loginUser = userRepository.selectByEmail(new HashUtil().sha256Encode(username));
+        System.out.println("로그인한 유저정보"+loginUser.getUserRoles());
+        // 정보를 가져옴
+        Set<UserRoleEntity> role = userRepository.selectByRole(loginUser.getUserId());
+        loginUser.setUserRoles(role);
         return entityToDTO(loginUser);
 
     }
@@ -33,6 +41,10 @@ public class UserDetailService implements UserDetailsService {
         userDTO.setUserEmail(aesUtil.decoding(userEntity.getUserEmail()));
         userDTO.setUserName(aesUtil.decoding(userEntity.getUserName()));
         userDTO.setPassword(userEntity.getPassword());
+        userDTO.setRoles(userEntity.getUserRoles().stream()
+                .map(role -> new UserRoleDTO(role.getRoleName()))
+                .collect(Collectors.toList()));
         return userDTO;
+
     }
 }

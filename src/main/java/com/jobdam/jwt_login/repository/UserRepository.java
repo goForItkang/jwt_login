@@ -1,12 +1,15 @@
 package com.jobdam.jwt_login.repository;
 
 import com.jobdam.jwt_login.Entity.UserEntity;
+import com.jobdam.jwt_login.Entity.UserRoleEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @Transactional
@@ -21,9 +24,20 @@ public class UserRepository {
     // 유저 로그인 로직
     @Transactional(readOnly = true)
     public UserEntity selectByEmail(String email) {
-       UserEntity user =  em.createQuery("select u from UserEntity u where u.userEmailHashCode = :email",UserEntity.class)
-               .setParameter("email",email)
-               .getSingleResult();
-       return user;
+        return em.createQuery(
+                        "select u from UserEntity u " +
+                                "left join fetch u.userRoles " +
+                                "where u.userEmailHashCode = :email", UserEntity.class)
+                .setParameter("email", email)
+                .getSingleResult();
+    }
+
+    public Set<UserRoleEntity> selectByRole(Long userId) {
+        List<UserRoleEntity> list = em.createQuery(
+                        "select r from UserRoleEntity r where r.user.userId = :userId", UserRoleEntity.class)
+                .setParameter("userId", userId)
+                .getResultList();
+
+        return new HashSet<>(list);
     }
 }
