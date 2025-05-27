@@ -25,6 +25,7 @@ public class JwtUtil {
     }
     //token 생성
     public String createToken(String email, String role){
+        String roleResult = role.substring(1, role.length()-1);
         return Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setSubject(email) // 고유 식별할 수있는내용
