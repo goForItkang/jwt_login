@@ -70,4 +70,24 @@ public class JwtUtil {
                 .getBody();
         return claims.get("role").toString();
     }
+    public String createRefreshToken(Long userId){
+        try {
+            return Jwts.builder()
+                    .setHeaderParam("typ","JWT")
+                    .setSubject(userId.toString())
+                    .setIssuedAt(new Date())
+                    .setExpiration(new Date(System.currentTimeMillis()*1000L*60*60*24*7))
+                    .signWith(getSecretKey(),SignatureAlgorithm.HS256)
+                    .compact();
+        }catch (Exception e){
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        }
+    }
+    public boolean validateRefreshToken(String token){
+        Claims claims = (Claims) Jwts.parserBuilder()
+                .setSigningKey(getSecretKey())
+                .build().parseClaimsJws(token);
+        return !claims.getExpiration().before(new Date());
+    }
+
 }

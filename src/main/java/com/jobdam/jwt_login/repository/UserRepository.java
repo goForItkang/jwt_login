@@ -4,14 +4,13 @@ import com.jobdam.jwt_login.Entity.UserEntity;
 import com.jobdam.jwt_login.Entity.UserRoleEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-@RestController
+@Repository
 @Transactional
 public class UserRepository {
     @PersistenceContext

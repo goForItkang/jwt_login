@@ -18,7 +18,6 @@ public class RefreshTokenEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String refreshToken;
-    private LocalDateTime expiryDate;  // 만료 시간 설정
 
     @OneToOne
     @JoinColumn(name = "user_Id")

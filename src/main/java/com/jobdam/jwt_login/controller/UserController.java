@@ -27,14 +27,17 @@ public class UserController {
     @PostMapping("/api/login")
     public HttpEntity<Message>login(@RequestBody UserDTO userDTO){
         //로그인한 유저 정보를 유저
+        //login 한 user에 access Token 발급
         UserDTO loginSuccessUser = userService.login(userDTO);
         String token = userService.tokenGenerate(loginSuccessUser);
+
+        // refresh Token 발급 및 확인
+        userService.saveRefreshToken(loginSuccessUser.getUserId());
         Message message = new Message();
         message.setStatus(200);
         message.setMessage("Login successful");
-        String accessToken = "token";
         System.out.println("정보"+loginSuccessUser);
-        message.setData(accessToken);
+        message.setData(token); // 토큰 값 생성
         return new HttpEntity<>(message);
     }
 
