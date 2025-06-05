@@ -13,7 +13,8 @@ public enum ErrorCode {
     ACCESS_DENIED(403, "A003", "접근 권한이 없습니다."),
     USER_NOT_FOUND(404, "U002", "존재하지 않는 사용자입니다."),
     ENCODING_ERROR(6001,"S001","암호화 중 오류가 났습니다"),
-    DECODING_ERROR(6002,"S002","복호화 오류가 났습니다");
+    DECODING_ERROR(6002,"S002","복호화 오류가 났습니다"),
+    PASSWORD_NOT_MATCH(400,"U004","패스워드가 일치하지 않습니다");
     private final int status;
     private final String errorCode;
     private final String errorMsg;

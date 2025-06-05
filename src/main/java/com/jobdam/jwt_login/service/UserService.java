@@ -3,6 +3,7 @@ package com.jobdam.jwt_login.service;
 import com.jobdam.jwt_login.Entity.RefreshTokenEntity;
 import com.jobdam.jwt_login.Entity.UserEntity;
 import com.jobdam.jwt_login.Entity.UserRoleEntity;
+import com.jobdam.jwt_login.dto.ReqSignupUser;
 import com.jobdam.jwt_login.dto.UserDTO;
 import com.jobdam.jwt_login.dto.UserRoleDTO;
 import com.jobdam.jwt_login.excetion.CustomException;
@@ -104,6 +105,14 @@ public class UserService {
         }catch (Exception e){
            throw new  CustomException(ErrorCode.ENCODING_ERROR);
         }
+    }
+    public void passwordMach(ReqSignupUser reqSignupUser){
+        if(!reqSignupUser.getPassword().equals(reqSignupUser.getReCheckPassword())){
+            throw new CustomException(ErrorCode.PASSWORD_NOT_MATCH);
+        }else{
+            // DB에 저장하는 로직
+        }
+
     }
 
 
